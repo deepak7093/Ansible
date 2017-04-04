@@ -1,0 +1,15 @@
+kibana_version: 5.1.2
+kibana_platform: amd64
+kibana_package: kibana-{{ kibana_version }}-{{ kibana_platform }}
+kibana_package_ext: deb
+kibana_download_url: "https://artifacts.elastic.co/downloads/kibana/{{ kibana_package }}.{{ kibana_package_ext }}"
+
+kibana_elasticsearch_url: 'http://localhost:9200'
+
+kibana_beats_dashboard_version: 1.2.1
+apt_cache_valid_time: 600
+
+kibana_dashboards_folder: kibana/dashboards/*.json
+kibana_searches_folder: kibana/searches/*.json
+kibana_visaulizations_folder: kibana/visualizations/*.json
+kibana_elasticsearch_templates: kibana/templates/*.json

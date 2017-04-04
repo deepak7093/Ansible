@@ -1,0 +1,72 @@
+{% set exclude_keywords = ['listen_ports', 'server_name', 'comment', 'error_log', 'access_log', 'locations', 'extra_directives'] %}
+{% if comment is defined %}
+{% for line in comment.rstrip().split('\n') %}
+# {{ line }}
+{% endfor %}
+{% endif %}
+{% if extra_directives is defined %}
+
+{% for line in extra_directives.rstrip().split('\n') %}
+{{ line }}
+{% endfor %}
+{% endif %}
+{% if servers is defined %}
+{% for server in servers %}
+
+{% if server.comment is defined %}
+{% for line in server.comment.rstrip().split('\n') %}
+# {{ line }}
+{% endfor %}
+{% endif %}
+server {
+{% if server.listen_ports is defined %}
+{% for listen_port in server.listen_ports %}
+    listen {{ listen_port }};
+{% endfor %}
+{% endif %}
+{% if server.server_name is defined %}
+    server_name {{ server.server_name }};
+{% endif %}
+
+{% if server.error_log is defined %}
+    error_log {{ server.error_log }};
+{% endif %}
+{% if server.access_log is defined %}
+    access_log {{ server.access_log }};
+{% endif %}
+
+{% for name, value in server.iteritems() %}
+{% if not name.startswith('_') and name.lower() not in exclude_keywords %}
+    {{ name }} {{ value }};
+{% endif %}
+{% endfor %}
+{% if 'extra_directives' in server %}
+
+{% for line in server['extra_directives'].rstrip().split('\n') %}
+    {{ line }}
+{% endfor %}
+{% endif %}
+{% if server.locations is defined %}
+{% for location in server.locations %}
+
+{% if location.comment is defined %}
+{% for line in location.comment.rstrip().split('\n') %}
+    # {{ line }}
+{% endfor %}
+{% endif %}
+{% if location.match_modifier is defined %}
+    location {{ location.match_modifier }} {{ location.location_match }} {
+{% else %}
+    location {{ location.location_match }} {
+{% endif %}
+{% if 'extra_directives' in location %}
+{% for line in location['extra_directives'].rstrip().split('\n') %}
+        {{ line }}
+{% endfor %}
+{% endif %}
+    }
+{% endfor %}
+{% endif %}
+}
+{% endfor %}
+{% endif %}

@@ -1,0 +1,14 @@
+- name: Download elasticsearch
+  shell: wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_repo_version }}.deb && dpkg -i elasticsearch-{{ elasticsearch_repo_version }}.deb
+
+- name: Start ES
+  shell:  update-rc.d elasticsearch defaults 95 10 && /etc/init.d/elasticsearch start
+
+- name: Configuring Elasticsearch Defaults
+  template: src=default/elasticsearch.j2 dest=/etc/default/elasticsearch owner=root group=root mode=0644
+  notify: restart elasticsearch
+
+- name: Configuring Elasticsearch
+  template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml owner=root group=root mode=0644
+  notify: restart elasticsearch
+
