@@ -1,0 +1,10 @@
+[program:kibana]
+
+command = /usr/share/kibana/bin/../node/bin/node --no-warnings /usr/share/kibana/bin/../src/cli -c /etc/kibana/kibana.yml 
+numprocs=1
+autostart=true
+user=kibana
+autorestart=true
+stdout_logfile=/var/log/supervisor/kibana.out.log
+logfile=/var/log/supervisor/kibana.log
+stderr_logfile=/var/log/supervisor/kibana.err.log

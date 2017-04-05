@@ -1,6 +1,5 @@
 ---
-- name: restart kibana
-  service: name=kibana state=restarted enabled=yes
+# handlers file for supervisor
 
 - name: restart supervisor
   service: name=supervisor state=restarted enabled=yes

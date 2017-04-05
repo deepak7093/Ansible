@@ -12,3 +12,19 @@
   template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml owner=root group=root mode=0644
   notify: restart elasticsearch
 
+- name: Install discover-ec2 plugin
+  shell: /usr/share/elasticsearch/bin/elasticsearch-plugin install discovery-ec2
+#  when: watcher_version_exists.stdout == 'no'
+  ignore_errors: yes
+  notify: restart elasticsearch
+
+#- name: stop elasticsearch
+#  shell: service elasticsearch stop
+
+#- name: Add supervisor config
+#  template: src=elasticsearch.conf.j2 dest=/etc/supervisor/conf.d/elasticsearch.conf owner=elasticsearch group=elasticsearch mode=0644
+#  notify:
+#    - restart supervisor
+
+#- name: update supervisor
+#  shell: supervisorctl update

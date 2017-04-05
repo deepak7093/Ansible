@@ -16,20 +16,21 @@
   template: src=upstart/logstash.j2 dest=/etc/default/logstash owner=root group=root mode=0644
   notify: restart logstash
 
+
 # SSL Cert
 - name: Create directory to store ssl crt & key
   tags: ["ssl"]
   file: path={{ ssl_cert_directory }} state=directory
 
-- name: Copy SSL cert
-  tags: ["ssl"]
-  copy: src={{ ssl_cert_local_directory }}/{{ ssl_cert }} dest={{ ssl_cert_directory }}
-  notify: restart logstash
-
-- name: Copy SSL key
-  tags: ["ssl"]
-  copy: src={{ ssl_cert_local_directory }}/{{ ssl_key }} dest={{ ssl_cert_directory }}
-  notify: restart logstash
+#- name: Copy SSL cert
+#  tags: ["ssl"]
+#  copy: src={{ ssl_cert_local_directory }}/{{ ssl_cert }} dest={{ ssl_cert_directory }}
+#  notify: restart logstash
+#
+#- name: Copy SSL key
+#  tags: ["ssl"]
+#  copy: src={{ ssl_cert_local_directory }}/{{ ssl_key }} dest={{ ssl_cert_directory }}
+#  notify: restart logstash
 
 # Config
 - name: Copy indexer templates
@@ -58,3 +59,14 @@
   command: service logstash configtest
   register: result
   changed_when: False
+
+- name: stop logstash
+  shell: service logstash stop
+
+- name: Add supervisor config
+  template: src=logstash.conf.j2 dest=/etc/supervisor/conf.d/logstash.conf owner=logstash group=logstash mode=0644
+  notify:
+    - restart supervisor
+
+- name: update supervisor
+  shell: supervisorctl update

@@ -1,3 +1,6 @@
 ---
 - name: restart logstash
   service: name=logstash state=restarted enabled=yes sleep=60
+
+- name: restart supervisor
+  service: name=supervisor state=restarted enabled=yes sleep=60

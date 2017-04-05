@@ -6,9 +6,24 @@
 - name: Download kibana zip
   shell: wget "{{ kibana_download_url }}" && dpkg -i {{ kibana_package }}.{{ kibana_package_ext }} 
 
+- name: export local variable
+  shell: echo "export LANGUAGE=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && export LC_TYPE=en_US.UTF-8" >> /etc/bash.bashrc
+
+- name: export local variable
+  shell: export LANGUAGE=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && export LC_TYPE=en_US.UTF-8
+
+
+- name: capture private_ip
+  shell: ifconfig | grep inet | grep -v inet6 | head -1 | awk -F ":" '{print $2}' | awk '{print $1}' 
+  register: ip_output
+
+
 - name: Configuring Kibana
   template: src=kibana.yml.j2 dest=/etc/kibana/kibana.yml owner=root group=root mode=0644
   notify: restart kibana
+
+#- name: Configure kibana
+#  shell: sed -i "s/localhost/{{ ip_output }}/g" /etc/kibana/kibana.yml 
 
 - name: Starting kibana
   service: name=kibana state=started enabled=yes
@@ -82,8 +97,17 @@
   changed_when: False
   tags: ['kibana_config']
 
-- name: export local variable
-  shell: export LANGUAGE=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && export LC_TYPE=en_US.UTF-8
+- name: stop logstash
+  shell: service kibana stop
+
+- name: Add supervisor config
+  template: src=kibana.conf.j2 dest=/etc/supervisor/conf.d/kibana.conf owner=kibana group=kibana mode=0644
+  notify:
+    - restart supervisor
+
+- name: update supervisor
+  shell: supervisorctl update
+
 
 - name: Flush handlers
   meta: flush_handlers

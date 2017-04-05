@@ -1,0 +1,12 @@
+---
+# tasks file for supervisor
+
+- name: install supervisor package
+  apt:
+    name: supervisor
+    state: present
+
+
+
+
+     
