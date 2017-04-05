@@ -34,8 +34,8 @@
   notify: restart elasticsearch
 
 - name: Install discover-ec2 plugin
-  shell: bin/plugin install discovery-ec2
-  when: watcher_version_exists.stdout == 'no'
+  shell: /usr/share/elasticsearch/bin/elasticsearch-plugin install discovery-ec2
+#  when: watcher_version_exists.stdout == 'no'
   notify: restart elasticsearch
 
 # Fix permissions

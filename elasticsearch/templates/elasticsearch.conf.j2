@@ -1,0 +1,12 @@
+[program:elasticsearch]
+command = /usr/bin/elasticsearch
+stdout_logfile = /var/log/supervisor/elasticsearch.log
+stderr_logfile = /var/log/supervisor/elasticsearch.err.log
+autostart = true
+autorestart = true
+user = elasticsearch
+startsecs = 10
+startretries = 5
+stopasgroup = true
+killasgroup = true
+stopsignal = INT

@@ -3,7 +3,7 @@ elasticsearch_pkg: elasticsearch
 #elasticsearch_plugin_marvel_version: 2.3.1
 #elasticsearch_plugin_license_version: 2.3.1
 #elasticsearch_plugin_watcher_version: 2.3.1
-#elasticsearch_with_plugin: false
+elasticsearch_with_plugin: true
 
 elasticsearch_heap_size_percentage: 0.5
 
@@ -11,15 +11,15 @@ apt_cache_valid_time: 600
 
 ##### new variabes #### 
 elasticsearch_cluster_name: elasticsearch
-elasticsearch_node_master: true
-elasticsearch_node_data: true
+#elasticsearch_node_master: 0
+#elasticsearch_node_data: 0
 #elasticsearch_log_dir
 #elasticsearch_conf_dir
 #elasticsearch_data_dir
 
 elasticsearch_plugin_aws_version: 5.3.0
 elasticsearch_plugin_aws_ec2_groups: ELK-test
-elasticsearch_plugin_aws_ec2_ping_timeout: 30s
+#elasticsearch_plugin_aws_ec2_ping_timeout: 30s
 elasticsearch_plugin_aws_region: ap-southeast-1
 elasticsearch_plugin_ec2_host_type: private_ip
 elasticsearch_plugin_ec2_network_host:  _ec2_
